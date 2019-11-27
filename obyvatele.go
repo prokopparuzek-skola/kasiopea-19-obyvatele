@@ -6,22 +6,21 @@ import "fmt"
 func addOne(count []int, graph [][]int, K int) bool {
 	for i := 1; i < len(count); i++ {
 		c := count[i]
-		for c < K {
+		if c != K {
 			c++
-			for _, to := range graph[i] {
-				t := false
-				for j := 0; j <= K-count[to]; j++ {
-					fmt.Printf("%d:%d:%d\n", i, c, count[to]+j)
-					if count[to]+j != c {
-						t = true
-						break
-					}
-				}
-				if !t {
-					return false
-				}
+		} else {
+			continue
+		}
+		ver := make([]bool, K-c+1)
+		for j := 0; j < len(graph[i]); j++ {
+			if count[graph[i][j]] >= c {
+				ver[K-count[graph[i][j]]] = true
 			}
-			return true
+		}
+		for _, v := range ver {
+			if v == false {
+				return true
+			}
 		}
 	}
 	return false
